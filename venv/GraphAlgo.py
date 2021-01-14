@@ -7,17 +7,6 @@ import queue
 from math import inf
 import matplotlib.pyplot as plt
 import random
-from typing import List
-
-
-
-class ComplexEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if hasattr(obj, 'repr_json'):
-            return obj.repr_json()
-        else:
-            return json.JSONEncoder.default(self, obj)
-
 
 def reboot(self):
     """
@@ -32,6 +21,23 @@ def reboot(self):
         node.tag = False
         node.info = "white"
         node.weight = 0
+
+
+def dfs(id: int, graph: DiGraph) -> list:
+    keys = []
+    listSCC = [id]
+    keys.append(id)
+    while listSCC:
+        node = listSCC.pop()
+        keysList = list(graph.all_out_edges_of_node(node).keys())
+        for i in keysList:
+            if not graph.getNode(i).tag:
+                listSCC.append(i)
+                graph.getNode(i).tag = True
+                keys.append(i)
+
+    reboot(graph)
+    return keys
 
 def reversed_graph(graph):
     """
@@ -56,24 +62,6 @@ def reversed_graph(graph):
     return reverse
 
 
-def dfs(id: int, graph: DiGraph) -> list:
-    list_SCC = [id]
-    keys = []
-    keys.append(id)
-
-    while list_SCC:
-        node = list_SCC.pop()
-        keysList = list(graph.all_out_edges_of_node(node).keys())
-
-        for i in keysList:
-            if not graph.getNode(i).tag:
-                list_SCC.append(i)
-                graph.getNode(i).tag = True
-                keys.append(i)
-
-    reboot(graph)
-    return keys
-
 class GraphAlgo(GraphAlgoInterface):
 
     """This class present Algorithm graph."""
@@ -94,6 +82,11 @@ class GraphAlgo(GraphAlgoInterface):
 
 
     def load_from_json(self, file_name: str) -> bool:
+        """
+        Loads a graph from a json file.
+        :param file_name:  The path to the json file
+        :return: True if the loading was successful, False if not
+        """
         my_dict = dict()
         j_graph = DiGraph()
         try:
@@ -121,6 +114,11 @@ class GraphAlgo(GraphAlgoInterface):
 
 
     def save_to_json(self, file_name: str) -> bool:
+        """
+        Saves the graph in JSON format to a file
+        :param file_name: The path to the out file
+        :return: True if the save was successful , False if not
+        """
         nodes = []
         edges = []
 
@@ -259,15 +257,15 @@ class GraphAlgo(GraphAlgoInterface):
         frame_x = max_x - min_x
         rad = 1 / 100 * frame_y
         for node in nodes:
-            node_x = float(node[1].getPos().split(',')[0])
-            node_y = float(node[1].getPos().split(',')[1])
+            node_x = float(node[1].location.split(',')[0])
+            node_y = float(node[1].location.split(',')[1])
             XV.append(node_x)
             YV.append(node_y)
-            text.append([node_x + rad, node_y + rad, node[1].getKey()])
+            text.append([node_x + rad, node_y + rad, node[1].id])
             for edge in graph.all_out_edges_of_node(node[0]):
                 dest = graph.get_all_v()[edge]
-                dest_x = float(dest.getPos().split(',')[0])
-                dest_y = float(dest.getPos().split(',')[1])
+                dest_x = float(dest.location.split(',')[0])
+                dest_y = float(dest.location.split(',')[1])
                 dx = dest_x - node_x
                 dy = dest_y - node_y
                 line_w = 0.0002 * frame_x
@@ -297,8 +295,8 @@ class GraphAlgo(GraphAlgoInterface):
             x = counter / sum
             y = random.random()
             z = 0
-            loc = str(x) + ',' + str(y) + ',' + str(z)
-            dic = graph.get_all_v()[node].location = loc
+            pos = str(x) + ',' + str(y) + ',' + str(z)
+            dic = graph.get_all_v()[node].location = pos
             counter += 1
 
 

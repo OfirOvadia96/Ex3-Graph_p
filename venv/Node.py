@@ -37,7 +37,6 @@ class Node:
         return str(self.__dict__)
 
 
-
     def __eq__(self, other) -> bool:
         return self.location == other.location and  self.id == other.id
 
@@ -52,4 +51,3 @@ class Node:
 
     def repr_json(self):
         return self.__dict__
-

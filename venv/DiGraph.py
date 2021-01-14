@@ -111,7 +111,7 @@ class DiGraph(GraphInterface):
         if node_id in self.TheGraph:
             return False
         else:
-            n1 = Node(node_id, tuple)
+            n1 = Node(node_id, pos)
             self.TheGraph[node_id] = n1
 
             self.node_size += 1
@@ -181,9 +181,3 @@ class DiGraph(GraphInterface):
 
     def repr_json(self):
         return self.__dict__
-
-    def load_from_json(self, json_dict):
-        self.nodeSize = json_dict["Nodes"]
-        self.edgeSize = json_dict["Edges"]
-        self.mc = json_dict["mc"]
-        self.graphDict = {k: Node(**v) for (k, v) in json_dict["graphDict"].items()}

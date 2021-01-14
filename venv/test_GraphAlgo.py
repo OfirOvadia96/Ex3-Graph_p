@@ -74,14 +74,15 @@ class test_GraphAlgo(unittest.TestCase):
         for i in range(1,4):
             graph.add_node(i)
 
-        graph.add_edge(2, 3, 5)
-        graph.add_edge(1, 3, 2.5)
-        graph.add_edge(2, 1, 4)
-        graph.add_edge(1, 2, 12.3)
+        graph.add_edge(2, 3, 2)
+        graph.add_edge(1, 3, 3.5)
+        graph.add_edge(2, 1, 10)
+        graph.add_edge(1, 2, 15.3)
 
         g_algo = GraphAlgo(graph)
         g_algo.save_to_json("test0")
         g_algo.load_from_json("test0")
+        g_algo.connected_components()
 
         self.assertEqual(g_algo.di_graph.v_size(), graph.v_size())
 
